@@ -64,7 +64,7 @@ python3 -m tests.spatial
 # Directory Structure
 ```text
 ├── diagrams                        # UML Diagrams directory
-│   └── lab5_uml.png                    # 
+│   └── lab5_uml.png                    # The class diagram
 ├── output                          # Output files
 │   └── lab4_report.json                # Summary dictionary output from runner script
 ├── src                             # Source files
@@ -118,6 +118,9 @@ Below is the candidate-class table derived from the problem statement:
 | rule result           | value object              | Yes               | Provides one consistent result shape from all rules.      |
 | report                | output representation     | Not yet           | A JSON/dict is sufficient for this exercise; a Report class would add little responsibility. |
 | program               | application               | No                | Main script entry point or CLI driver rather than a domain model class. |
+
+# UML Diagram
+<img src="diagrams/lab5_uml.png" alt="lab5_uml" width="800">
 
 # Reflections
 
