@@ -122,6 +122,8 @@ Below is the candidate-class table derived from the problem statement:
 # UML Diagram
 <img src="diagrams/lab5_uml.png" alt="lab5_uml" width="800">
 
+
+
 # Reflections
 
 ## 👤 Author

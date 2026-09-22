@@ -1,0 +1,66 @@
+class Parcel:
+    def __init__(self, parcel_id, geometry, zone, area_sqm):
+        if not parcel_id:
+            raise ValueError("parcel_id is required.")
+        if not zone:
+            raise ValueError("zone is required.")
+        if float(area_sqm) <= 0:
+            raise ValueError("area_sqm must be positive.")
+        if not geometry.is_valid:
+            raise ValueError("Invalid geometry.")
+
+        self._parcel_id = parcel_id
+        self._geometry = geometry
+        self._zone = zone
+        self._area_sqm = area_sqm
+
+    @property
+    def parcel_id(self) -> str:
+        return self._parcel_id
+
+    @property
+    def zone(self) -> str:
+        return self._zone
+
+    @property
+    def geometry(self):
+        return self._geometry
+
+    @property
+    def area_sqm(self) -> float:
+        return self._area_sqm
+
+    def intersects(self, other):
+        return self._geometry.intersects(other.geometry)
+
+class HazardZone:
+    def __init__(self, zone_id, geometry, hazard_type, severity):
+        if not zone_id:
+            raise ValueError("zone_id is required.")
+        if not geometry.is_valid:
+            raise ValueError("Invalid geometry")
+        if not hazard_type:
+            raise ValueError("hazard_type is required.")
+        if not severity:
+            raise ValueError("severity is required.")
+
+        self._zone_id = zone_id
+        self._geometry = geometry
+        self._hazard_type = hazard_type
+        self._severity = severity
+
+    @property
+    def zone_id(self) -> str:
+        return self._zone_id
+
+    @property
+    def hazard_type(self) -> str:
+        return self._hazard_type
+
+    @property
+    def geometry(self):
+        return self._geometry
+
+    @property
+    def severity(self) -> float:
+        return self._severity
