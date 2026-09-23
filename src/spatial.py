@@ -64,3 +64,21 @@ class HazardZone:
     @property
     def severity(self) -> float:
         return self._severity
+
+class Road:
+    def __init__(self, road_id, geometry):
+        if not road_id:
+            raise ValueError("road_id is required")
+        if not geometry.is_valid:
+            raise ValueError("Invalid geometry.")
+
+        self._road_id = road_id
+        self._geometry = geometry
+
+    @property
+    def road_id(self) -> str:
+        return self._road_id
+
+    @property
+    def geometry(self):
+        return self._geometry

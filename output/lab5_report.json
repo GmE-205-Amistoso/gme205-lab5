@@ -19,12 +19,17 @@
           "rulename": "No hazard overlap",
           "passed": false,
           "message": "P-001 intersects a mapped hazard zone HZ-01"
+        },
+        {
+          "rulename": "Road accessibility",
+          "passed": true,
+          "message": "P-001 is within the distance of 50 to road R-001"
         }
       ]
     },
     {
       "parcel_id": "P-002",
-      "passed": true,
+      "passed": false,
       "results": [
         {
           "rulename": "Minimum parcel area",
@@ -40,6 +45,11 @@
           "rulename": "No hazard overlap",
           "passed": true,
           "message": "P-002 is not in a mapped hazard zone HZ-01"
+        },
+        {
+          "rulename": "Road accessibility",
+          "passed": false,
+          "message": "P-002 is not within the distance of 50 to road R-001"
         }
       ]
     }

@@ -1,8 +1,11 @@
 # test/test_spatial.py
 import pytest
-from spatial import Parcel, HazardZone
-from shapely.geometry import box
+from spatial import Parcel, HazardZone, Road
+from shapely.geometry import box, LineString
 
+# -----------------------
+# Parcel Tests
+# -----------------------
 
 def test_parcel_object_creation_passes():
     p = Parcel(
@@ -13,7 +16,6 @@ def test_parcel_object_creation_passes():
     )
     assert isinstance(p, Parcel)
 
-
 def test_invalid_parcel_creation_raises_exception():
     with pytest.raises((KeyError, TypeError, ValueError)):
         Parcel(
@@ -23,6 +25,9 @@ def test_invalid_parcel_creation_raises_exception():
             5000
         )
 
+# -----------------------
+# HazardZone Tests
+# -----------------------
 
 def test_hazard_zone_creation_passes():
     hz = HazardZone(
@@ -33,7 +38,6 @@ def test_hazard_zone_creation_passes():
     )
     assert isinstance(hz, HazardZone)
 
-
 def test_invalid_hazard_zone_creation_raises_exception():
     with pytest.raises((KeyError, TypeError, ValueError)):
         HazardZone(
@@ -43,4 +47,20 @@ def test_invalid_hazard_zone_creation_raises_exception():
             None
         )
 
+# -----------------------
+# Road Tests
+# -----------------------
 
+def test_valid_road_creation_passes():
+    r = Road(
+        "R-001",
+        LineString([(5,5), (50,5)])
+    )
+    assert r.road_id == "R-001"
+
+def test_invalid_road_creation_raises_exception():
+    with pytest.raises((KeyError, TypeError, ValueError)):
+        Road(
+            None,
+            LineString([(5,5), (50,5)])
+        )

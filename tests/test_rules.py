@@ -1,6 +1,7 @@
-from rules import MinimumAreaRule, AllowedZoneRule, NoHazardOverlapRule
-from spatial import Parcel, HazardZone
-from shapely.geometry import box
+from rules import MinimumAreaRule, AllowedZoneRule, NoHazardOverlapRule, RoadAccessRule
+from spatial import Parcel, HazardZone, Road
+from shapely.geometry import box, LineString
+import pytest
 
 TEST_MIN_AREA = 5000
 ALLOWED_ZONES = ["Residential", "Commercial"]
@@ -102,3 +103,54 @@ def test_parcel_intersects_hazard_zone_fails():
         )
     )
     assert not evaluated.passed
+
+# -----------------------
+# RoadAccessRule Tests
+# -----------------------
+
+def test_parcel_within_max_distance_threshold_passes():
+    ra = RoadAccessRule(
+        Road(
+            "R-001",
+            LineString([(25,15), (50,15)])
+        ),
+        20
+    )
+    evaluated = ra.evaluate(
+        Parcel(
+            "P-002",
+            box(0, 0, 80, 80),
+            "Residential",
+            7200
+        )
+    )
+    assert evaluated.passed
+
+def test_parcel_not_within_max_distance_threshold_passes():
+    ra = RoadAccessRule(
+        Road(
+            "R-001",
+            LineString([(25,15), (50,15)])
+        ),
+        20
+    )
+    evaluated = ra.evaluate(
+        Parcel(
+            "P-998",
+            box(0, 0, 5, 5),
+            "Residential",
+            7200
+        )
+    )
+    assert not evaluated.passed
+
+def test_road_access_negative_max_distance_threshold_raises_exception():
+    with pytest.raises(ValueError):
+        ra = RoadAccessRule(
+            Road(
+                "R-001",
+                LineString([(25,15), (50,15)])
+            ),
+            -20
+        )
+    

@@ -110,9 +110,50 @@ Below is the candidate-class table derived from the problem statement:
 # UML Diagram
 <img src="diagrams/lab5_uml.png" alt="lab5_uml" width="800">
 
+# Extension without coordinator rewrite
+In order to make the program scalable, the `ParcelAssessment` class is designed so that rule-checking logic is handled dynamically through polymorphism.
 
+A snapshot of the initial `rules` list in the runner script is shown below:
+```python
+rules = [
+    MinimumAreaRule(5000),
+    AllowedZoneRule(["Residential", "Commercial"]),
+    NoHazardOverlapRule(hazard)
+]
+```
+
+The `rules` list after adding a new rule:
+
+```python
+rules = [
+    MinimumAreaRule(5000),
+    AllowedZoneRule(["Residential", "Commercial"]),
+    NoHazardOverlapRule(hazard),
+    RoadAccessRule(road, 20)
+]
+```
+After implementing a new spatial object `Road` and a new rule `RoadAccessRule`, the list only has to be updated. No changes are needed to the internal logic of how each assessment is evaluated. The coordinator itself does not need to know which concrete rule types exist, it only need to use the shared `evaluate` interface.
+```python
+# Evaluate the parcel for all set rules
+def evaluate(self):
+    results = []
+    for rule in self._rules:
+        result = rule.evaluate(self._parcel)
+        results.append(result)
+    return results
+
+# Check if the parcel passes all rules
+def passed(self):
+    for result in self.evaluate():
+        if not result.passed:
+            return False
+    return True
+```
+By giving every rule object a common `evaluate` method, the coordinator can loop over all rules polymorphically. This avoids the alternative of a chain of nested if-else statements, which would require refactoring the coordinator's internal logic every time a new rule is added.
 
 # Reflections
+
+
 
 ## 👤 Author
 **ALLAN FRITZGERALD N. AMISTOSO** <br>
