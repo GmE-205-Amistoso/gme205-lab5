@@ -1,7 +1,7 @@
 import pytest
 from assessment import AssessmentRule, RuleResult, ParcelAssessment
-from spatial import Parcel
-from rules import MinimumAreaRule
+from spatial import Parcel, HazardZone
+from rules import MinimumAreaRule, AllowedZoneRule, NoHazardOverlapRule
 import dataclasses
 from shapely.geometry import box
 
@@ -81,3 +81,26 @@ def test_parcel_assessment_with_rules_passed():
         rules=[MinimumAreaRule(5000)], 
     )
     assert assessment.passed()
+
+def test_assessment_accepts_mixed_rule_subclasses():
+    parcel_b = Parcel(
+        "P-002",
+        box(120, 0, 190, 80),
+        "Commercial",
+        5600
+    )
+    hazard = HazardZone(
+        "HZ-01",
+        box(60, 50, 110, 100),
+        "Flood",
+        "High"
+    )
+    rules = [ 
+        MinimumAreaRule(5000),
+        AllowedZoneRule({"Residential", "Commercial"}),
+        NoHazardOverlapRule(hazard)
+    ] 
+    assessment = ParcelAssessment(parcel_b, rules)
+    results = assessment.evaluate() 
+    assert len(results) == 3 
+    assert all(isinstance(result, RuleResult) for result in results)
