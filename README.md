@@ -7,78 +7,66 @@ Before starting, make sure that you have installed the following dependencies:
 - **[pip](https://pip.pypa.io/en/stable/installation/) >= 26.2.1**
 - *(Optional)* **[VSCode](https://code.visualstudio.com/)**
 
-# Set up the Virtual Environment
+## Set up the Virtual Environment
 
-## Create a Python Virtual Environment
-Create a Python virtual env (venv):
+### Create a Python Virtual Environment
+Create and activate a virtual environment:
 
 ```bash
 python3 -m venv .venv
-```
-
-Run the virtual environment:
-```bash
 source .venv/bin/activate
 ```
 
-## Install Dependencies
-Upgrade pip.
+### Install Dependencies
+Upgrade pip, then install the required packages:
 
 ```bash
 pip install --upgrade pip
-```
-
-Install shapely and pytest
-```bash
 pip install shapely pytest
 ```
 
-Save the installed packages.
+Freeze the installed packages to `requirements.txt` so the environment is reproducible:
 
 ```bash
 pip freeze > requirements.txt
 ```
 
-## How to run the Python scripts
-### Running the runner script
-Run the runner script using the following command:
+## Executing the Python Scripts
+### Runner script
+This is the entry point of the application. Run the runner script using the following command:
 
 ```bash
 python3 src/run_lab5.py
 ```
 
-### Running the test files
-Run **test_assessment.py** using the following command:
+### Test files
+**Note:** `test/conftest.py` automatically adds `src/` to the Python path, so test files can import modules (e.g. `from rules import ...`) without needing `src.` prefixes or manual path manipulation.
+
+Run the full test suite with pytest:
+
 ```bash
-python3 -m tests.test_assessment
-```
-Run **test_rules.py** using the following command:
-```bash
-python3 -m tests.test_rules
-```
-Run **test_spatial.py** using the following command:
-```bash
-python3 -m tests.spatial
+python3 -m pytest tests/ -v
 ```
 
 # Directory Structure
 ```text
-├── diagrams                        # UML Diagrams directory
-│   └── lab5_uml.png                    # The class diagram
-├── output                          # Output files
-│   └── lab4_report.json                # Summary dictionary output from runner script
-├── src                             # Source files
-│   ├── assessment.py                   # Code for coordinating parcel and a collection of rules
-│   ├── demo.py                         # Code for small incremental checks
-│   ├── rules.py                        # Code for rule heirarchy
-│   ├── run_lab5.py                     # Runner script
-│   └── spatial.py                      # Code containing the spatial/domain entities
-├── test                            # Verification codes
-│   ├── test_assessment.py              # Targeted tests for assessment.py
-│   ├── test_rules.py                   # Targeted tests for rules.py
-│   └── test_spatial.py                 # Targeted tests for spatial.py
-├── README.md                       # This README file
-└── requirements.txt                # List of dependencies
+├── diagrams                        # Design Documentation
+│   └── lab5_uml.png                    # UML class diagram for the Lab 5 domain model
+├── output                          # Generated artifacts
+│   └── lab5_report.json                # Assessment summary produced by run_lab5.py
+├── src                             # Application source code
+│   ├── assessment.py                   # Coordinates a Parcel against a collection of Rules
+│   ├── demo.py                         # Ad-hoc/manual smoke tests and incremental checks
+│   ├── rules.py                        # Rule class hierarchy (base Rule + concrete rule types)
+│   ├── run_lab5.py                     # Entry point: wires everything together and writes output/
+│   └── spatial.py                      # Domain entities (e.g. Parcel, geometry primitives)
+├── tests                           # Automated unit tests
+│   ├── conftest.py                     # Auto-loaded by pytest before test collection; inserts src/ into sys.path
+│   ├── test_assessment.py              # Unit tests for assessment.py
+│   ├── test_rules.py                   # Unit tests for rules.py
+│   └── test_spatial.py                 # Unit tests for spatial.py
+├── README.md                       # Project overview, setup, and usage instructions
+└── requirements.txt                # Pinned/declared third-party dependencies
 ```
 
 # The Problem Overview

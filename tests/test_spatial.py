@@ -1,92 +1,46 @@
-from src.spatial import Parcel, HazardZone
+# test/test_spatial.py
+import pytest
+from spatial import Parcel, HazardZone
 from shapely.geometry import box
 
-# ----------------------------
-# spatial.Parcel tests
-# ----------------------------
-test_parcel = {
-    "name": "P-001",
-    "geometry": box(0, 0, 80, 80),
-    "zone": "Residential",
-    "area_sqm": 7200
-}
 
-p = Parcel(
-    test_parcel["name"],
-    test_parcel["geometry"],
-    test_parcel["zone"],
-    test_parcel["area_sqm"]
-)
-
-print("Testing Parcel object creation...", end=" ")
-expected_parcel_id = "P-001"
-if(p.parcel_id) == expected_parcel_id:
-    print("Pass")
-else:
-    print("Fail")
-
-print("Testing Invalid Parcel object creation...", end=" ")
-test_invalid_parcel = {
-    "name": "IP-001",
-    "geometry": box(0, 0, 80, 0),
-    "zone": "Invalid",
-    "area_sqm": 5000
-}
-try:
+def test_parcel_object_creation_passes():
     p = Parcel(
-        test_invalid_parcel["name"],
-        test_invalid_parcel["geometry"],
-        test_invalid_parcel["zone"],
-        test_invalid_parcel["area_sqm"]
+        "P-001",
+        box(0, 0, 80, 80),
+        "Residential",
+        7200
     )
-    print("Fail. Created Parcel object with invalid parameter.")
-except (KeyError, TypeError, ValueError) as exc:
-    print(f"Pass. Correctly captured error: {exc}")
+    assert isinstance(p, Parcel)
 
-# ----------------------------
-# spatial.HazardZone tests
-# ----------------------------
-test_hazard = {
-    "zone_id": "HZ-01", 
-    "geometry": box(60, 50, 110, 100), 
-    "hazard_type": "Flood", 
-    "severity": "High",
-}
 
-hz = HazardZone(
-    test_hazard["zone_id"],
-    test_hazard["geometry"],
-    test_hazard["hazard_type"],
-    test_hazard["severity"]
-)
-print("Testing HazardZone object creation...", end=" ")
-expected_hazard_id = "HZ-01"
-if(hz.zone_id) == expected_hazard_id:
-    print("Pass")
-else:
-    print("Fail")
+def test_invalid_parcel_creation_raises_exception():
+    with pytest.raises((KeyError, TypeError, ValueError)):
+        Parcel(
+            "IP-001",
+            box(0, 0, 80, 0),
+            "Invalid",
+            5000
+        )
 
-print("Testing Invalid HazardZone object creation...", end=" ")
-test_invalid_hazard = {
-    "zone_id": "IHZ-0001", 
-    "geometry": box(0, 00, 110, 100), 
-    "hazard_type": "Invalid", 
-    "severity": None,
-}
-try:
-    invalid_hz = HazardZone(
-        test_invalid_hazard["zone_id"],
-        test_invalid_hazard["geometry"],
-        test_invalid_hazard["hazard_type"],
-        test_invalid_hazard["severity"]
+
+def test_hazard_zone_creation_passes():
+    hz = HazardZone(
+        "HZ-01",
+        box(60, 50, 110, 100),
+        "Flood",
+        "High"
     )
-    print("Fail. Created HazardZone object with invalid parameter.")
-except (KeyError, TypeError, ValueError) as exc:
-    print(f"Pass. Correctly captured error: {exc}")
+    assert isinstance(hz, HazardZone)
 
-print("Testing Parcel intersects method...", end=" ")
-if p.intersects(hz):
-    print("Pass")
-else:
-    print("Fail")
-    
+
+def test_invalid_hazard_zone_creation_raises_exception():
+    with pytest.raises((KeyError, TypeError, ValueError)):
+        HazardZone(
+            "IHZ-0001",
+            box(0, 0, 110, 100),
+            "Invalid", 
+            None
+        )
+
+
