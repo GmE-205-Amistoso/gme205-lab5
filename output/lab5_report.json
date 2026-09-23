@@ -1,0 +1,47 @@
+{
+  "scenario": "parcel-development-assessment",
+  "parcels": [
+    {
+      "parcel_id": "P-001",
+      "passed": false,
+      "results": [
+        {
+          "rulename": "Minimum parcel area",
+          "passed": true,
+          "message": "7200 m\u00b2 >= 5000 m\u00b2"
+        },
+        {
+          "rulename": "Allowed zones",
+          "passed": true,
+          "message": "Residential is in the allowed zones ['Residential', 'Commercial']"
+        },
+        {
+          "rulename": "No hazard overlap",
+          "passed": false,
+          "message": "P-001 intersects a mapped hazard zone HZ-01"
+        }
+      ]
+    },
+    {
+      "parcel_id": "P-002",
+      "passed": true,
+      "results": [
+        {
+          "rulename": "Minimum parcel area",
+          "passed": true,
+          "message": "5600 m\u00b2 >= 5000 m\u00b2"
+        },
+        {
+          "rulename": "Allowed zones",
+          "passed": true,
+          "message": "Commercial is in the allowed zones ['Residential', 'Commercial']"
+        },
+        {
+          "rulename": "No hazard overlap",
+          "passed": true,
+          "message": "P-002 is not in a mapped hazard zone HZ-01"
+        }
+      ]
+    }
+  ]
+}
