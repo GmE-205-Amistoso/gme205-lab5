@@ -1,26 +1,33 @@
-from src.rules import MinimumAreaRule, AllowedZoneRule
-from src.spatial import Parcel
+from rules import MinimumAreaRule, AllowedZoneRule, NoHazardOverlapRule
+from spatial import Parcel, HazardZone
+from assessment import ParcelAssessment
 from shapely.geometry import box
 
-TEST_MIN_AREA = 5000
-test_parcel = {
-    "name": "P-001",
-    "geometry": box(0, 0, 80, 80),
-    "zone": "Residential",
-    "area_sqm": 7200
-}
-p = Parcel(
-    test_parcel["name"],
-    test_parcel["geometry"],
-    test_parcel["zone"],
-    test_parcel["area_sqm"]
+parcel = Parcel(
+    "P-001",
+    box(0, 0, 80, 80),
+    "Residential",
+    7200
 )
 
-print("Testing Minimum Area rule...", end=" ")
-mar = MinimumAreaRule(TEST_MIN_AREA)
-expected_passed = True
-eval = mar.evaluate(p)
-if eval.passed == expected_passed:
-    print("Pass")
+hazard_zone = HazardZone(
+    "HZ-01",
+    box(90, 85, 110, 100),
+    "Flood",
+    "High"
+)
+
+assessment = ParcelAssessment( 
+    parcel=parcel, 
+    rules=[ 
+        MinimumAreaRule(5000),
+        AllowedZoneRule({"Residential", "Commercial"}),
+        NoHazardOverlapRule(hazard_zone), 
+    ], 
+)
+
+assessment.evaluate()
+if assessment.passed():
+    print(f"Parcel {parcel.parcel_id} passed.")
 else:
-    print("Fail")
+    print(f"Parcel {parcel.parcel_id} failed.")

@@ -1,6 +1,9 @@
 import pytest
-from assessment import AssessmentRule, RuleResult
+from assessment import AssessmentRule, RuleResult, ParcelAssessment
+from spatial import Parcel
+from rules import MinimumAreaRule
 import dataclasses
+from shapely.geometry import box
 
 # -----------------------
 # AssessmentRule Tests
@@ -48,3 +51,33 @@ def test_rule_result_equality():
     a = RuleResult("Some rule", True, "ok")
     b = RuleResult("Some rule", True, "ok")
     assert a == b
+
+# -----------------------
+# ParcelAssessment Tests
+# -----------------------
+
+def test_parcel_assessment_no_rules_raised_exception():
+    parcel = Parcel(
+        "P-001",
+        box(0, 0, 80, 80),
+        "Residential",
+        7200
+    )
+    with pytest.raises(ValueError):
+        assessment = ParcelAssessment( 
+            parcel=parcel, 
+            rules=[], 
+        )
+
+def test_parcel_assessment_with_rules_passed():
+    parcel = Parcel(
+        "P-001",
+        box(0, 0, 80, 80),
+        "Residential",
+        7200
+    )
+    assessment = ParcelAssessment( 
+        parcel=parcel, 
+        rules=[MinimumAreaRule(5000)], 
+    )
+    assert assessment.passed()
